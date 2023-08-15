@@ -2,4 +2,5 @@ const CategoryService = require('../../WeSociety.Application/Services/Category.s
 
 module.exports = {
     getAll: CategoryService.getAll,
+    getById: CategoryService.getById,
 }
