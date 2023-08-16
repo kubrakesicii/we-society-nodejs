@@ -1,11 +1,11 @@
 module.exports = {
     dialect: 'mssql',
-    server: 'localhost',
-    database: 'WeSocietyDb',
+    server: process.env.DB_SERVER,
+    database: process.env.DB_NAME,
     authentication:{
         options:{
-            userName:'sa',
-            password:'Adesso123456!'
+            userName:process.env.DB_USER,
+            password:process.env.DB_PASSWORD
         }
     }
 };

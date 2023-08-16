@@ -1,4 +1,4 @@
-const CategoryRouter = require('./Category.route')
+const CategoryRouter = require('./Category.router')
 
 
 

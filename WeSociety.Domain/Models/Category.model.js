@@ -15,12 +15,12 @@ Category = (sequelize) => {
       CreatedTime: {
         type: DataTypes.DATE,
         allowNull: true,
-        defaultValue: sequelize.literal("(CURRENT_DATE())")
+        defaultValue: DataTypes.NOW
       },
       UpdatedTime: {
         type: DataTypes.DATE,
         allowNull: true,
-        defaultValue: sequelize.literal("(CURRENT_DATE())")
+        defaultValue: DataTypes.NOW
       },
       IsActive: { type: DataTypes.TINYINT, default: 1 },
     };

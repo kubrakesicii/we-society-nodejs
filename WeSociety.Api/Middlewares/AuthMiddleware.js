@@ -1,15 +1,26 @@
 const {verifyToken} = require('../../WeSociety.Infrastructure/Authentication/TokenService')
+const {UnauthorizedError} = require("../../WeSociety.Application/Errors/ErrorResponse")
 
 module.exports = (req, res,next) => {
+    console.log("IN AUTH MİDD");
     try{
-        req.token = verifyToken(req)
+        const token = req.headers.authorization?.split(" ")[1] || "";
+        console.log("Token : ", token);
+
+        if(token != null) {
+            req.token = verifyToken(token)
+        } else {
+            console.log("Token is null");
+            return next(new UnauthorizedError())
+        }
         next()
     } catch(error) {
+        console.log("ERR : ", error);
         if (error.name == "TokenExpiredError") {
-            // return new CLIENT_ERROR_RESPONSES(res, 401, null, { validate: false, message: 'Token is expired. Please refresh token or log in again.' })
+            //return next(new UnauthorizedError())
         }
         else {
-            // return new CLIENT_ERROR_RESPONSES(res, 401, null, { validate: false, message: 'JWT is broken. Please check token in headers' })
+            return next(new UnauthorizedError())
         }
     }
 }
