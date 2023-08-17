@@ -14,4 +14,12 @@ class UnauthorizedError {
   }
 }
 
-module.exports = { NotfoundError, UnauthorizedError };
+class TokenExpiredError {
+  constructor() {
+    (this.success = false),
+    (this.status = 401),
+    (this.message = "TOKENEXPIRED");
+  }
+}
+
+module.exports = { NotfoundError, UnauthorizedError,TokenExpiredError };

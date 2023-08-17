@@ -8,16 +8,13 @@ const InitializeDbContext = async () => {
     const dialect = 'mssql';
     const host = dbConfig.server;
     const { userName, password } = dbConfig.authentication.options;
-    // connect to db
+    // Connect to db
     const sequelize = new Sequelize(dbConfig.database, userName, password, {host,dialect})
 
-    // create db if it doesn't already exist
-    // await ensureDbExists(dbConfig.database);
-
-    // init models and add them to the exported db object
+    // Init models and add them to the exported db object
     dbContext.Categories = require('../../WeSociety.Domain/Models/Category.model')(sequelize);
 
-    //sync all models with db
+    //Sync all models with db
     await sequelize.sync({})
 
     try {

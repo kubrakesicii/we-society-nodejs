@@ -15,23 +15,7 @@ const createToken = (data) => {
 }
 
 const verifyToken = (token) => {
-    var secret = Buffer.from(process.env.JWT_SECURITY_KEY, 'base64')
-    //var tokenBuffer = Buffer.from(token, 'base64')
-    var signBuffer = Buffer.from(token.split('.')[2], 'base64')
-
-    // console.log("ENV KEY : ", process.env.JWT_SECURITY_KEY);
-    // const decodedToken = jwt.verify(token, secret, {algorithms:['HS256']});
-
-    // console.log("DECODED : ", decodedToken);
-
-    // console.log("Secret : ", secret);
-
-    console.log("TYPE : ", typeof(signBuffer));
-    console.log("SİGN : ", signBuffer);
-    const res = crypto.verify('SHA256', token,process.env.JWT_SECURITY_KEY, signBuffer)
-
-    console.log("RES : ", res);
-
+    const decodedToken = jwt.verify(token, process.env.JWT_SECURITY_KEY, {algorithms:['HS256']});
     return decodedToken;
 }
 
