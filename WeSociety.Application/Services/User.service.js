@@ -21,6 +21,10 @@ module.exports = {
                 };
         
         const newUser = await context.AspNetUser.create(newData)
+
+        //create empty userProfile fot this user
+        await context.UserProfile.create({UserProfileId:newUser.Id})
+        
         const dto = userMapping.GetUserDto(newUser)
         return new OK(res, dto)
     },
