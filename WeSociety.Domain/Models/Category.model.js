@@ -1,9 +1,13 @@
 const { DataTypes, Model } = require("sequelize");
 require('sequelize');
 
-class Category extends Model{}
+module.exports = (sequelize) => {
+    class Category extends Model{
+      static associate = (models) => {
+          Category.hasMany(models.Article, {as:'Articles'})
+      }
+    }
 
-Category = (sequelize) => {
     const attributes = {
       Id: {
         type: DataTypes.INTEGER,
@@ -22,13 +26,13 @@ Category = (sequelize) => {
         allowNull: true,
         defaultValue: DataTypes.NOW
       },
-      IsActive: { type: DataTypes.TINYINT, default: 1 },
+      IsActive: { type: DataTypes.TINYINT, default: 1 }
     };
   
-    return sequelize.define("Category", attributes, {
+    Category.init(attributes, {
+      sequelize,
+      modelName:"Category",
       timestamps: false
     })
-}
-
-module.exports = Category;
-  
+    return Category;
+}  

@@ -1,8 +1,8 @@
 
 
 const GetCategoryDto = (category) => ({
-    Id : category.Id,
-    Name : category.Name
+    id : category.Id,
+    name : category.Name
 });
 
 module.exports = {GetCategoryDto}

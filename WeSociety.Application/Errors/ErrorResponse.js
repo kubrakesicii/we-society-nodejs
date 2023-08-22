@@ -6,6 +6,15 @@ class NotfoundError {
   }
 }
 
+class UserExistsError {
+  constructor() {
+    (this.success = false), 
+    (this.status = 200), 
+    (this.message = "USEREXISTS");
+  }
+}
+
+
 class UnauthorizedError {
   constructor() {
     (this.success = false),
@@ -22,4 +31,14 @@ class TokenExpiredError {
   }
 }
 
-module.exports = { NotfoundError, UnauthorizedError,TokenExpiredError };
+
+class LoginError {
+  constructor() {
+    (this.success = false),
+    (this.status = 200),
+    (this.message = "LOGINERROR");
+  }
+}
+
+
+module.exports = { NotfoundError, UnauthorizedError,TokenExpiredError,UserExistsError, LoginError };

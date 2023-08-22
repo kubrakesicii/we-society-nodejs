@@ -1,6 +1,6 @@
 const express = require('express')
 const CategoryController = require('../Controllers/Category.controller')
-const router = express.Router();
+const router = express.Router({caseSensitive: false});
 const auth = require('../Middlewares/AuthMiddleware')
 
 

@@ -1,17 +1,17 @@
 const context = require('../../WeSociety.Persistence/Context/DbContext')
 const {OK} = require('../Reponses/Response')
 const {NotfoundError, UnauthorizedError} = require('../Errors/ErrorResponse')
-const categoryMapping = require('../Mappings/Category.mapping')
+const categoryMapping = require('../Mappings/Category.mapping');
 
 module.exports = {
     getAll : async (req, res,next) => {
-        const categories = await context.Categories.findAll()
-        var dtos = categories.map(c => categoryMapping.GetCategoryDto(c))
-        return new OK(res,dtos)
+        const categories = await context.Category.findAll()
+        // var dtos = categories.map(c => categoryMapping.GetCategoryDto(c))
+        return new OK(res,categories)
     },
 
     getById : async (req, res,next) => {
-        const category = await context.Categories.findOne({
+        const category = await context.Category.findOne({
             where: {
                 Id:req.params.id
             }
@@ -24,7 +24,7 @@ module.exports = {
 
     insert : async (req,res,next) => {
         const data = req.body;
-        const newCategory = await context.Categories.create(data)
+        const newCategory = await context.Category.create(data)
         return new OK(res,newCategory)
 
     },
@@ -32,7 +32,7 @@ module.exports = {
     update : async (req,res,next) => {
         // Güncellenmek istenen şarta uyan row yoksa hata dönmez, affectedRows = 0 gelir
         const data = req.body;
-        const affectedRows = await context.Categories.update(data, {
+        const affectedRows = await context.Category.update(data, {
             where: {
                 Id:req.params.id
             }
@@ -44,7 +44,7 @@ module.exports = {
 
     delete : async (req,res,next) => {
         // Silinmek istenen şarta uyan row yoksa hata dönmez, affectedRows = 0 gelir
-        const affectedRows = await context.Categories.destroy({
+        const affectedRows = await context.Category.destroy({
             where: {
                 Id:req.params.id
             }
