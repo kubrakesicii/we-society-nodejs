@@ -5,8 +5,8 @@ module.exports = (sequelize,) => {
         static associate = (models) => {            
             Article.belongsTo(models.UserProfile, {foreignKey: 'UserProfileId', as : 'UserProfile'})
             Article.belongsTo(models.Category, {foreignKey: 'CategoryId', as : 'Category'})
-            Article.hasMany(models.ArticleClap, {as:'ArticleClaps'})
-            Article.hasMany(models.ArticleComment, {as:'ArticleComments'})
+            Article.hasMany(models.ArticleClap, {as:'Claps'})
+            Article.hasMany(models.ArticleComment, {as:'Comments'})
 
             Article.hasMany(models.ReadingListArticle, {as:'ReadingLists', foreignKey:'ArticleId'})
 

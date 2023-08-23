@@ -7,8 +7,8 @@ const GetUserProfileDto = (userProfile) => (
         image : userProfile.Image,
         github : userProfile.Github,
         linkedin : userProfile.Linkedin,
-        followersCount: userProfile.Followers.length,
-        followingsCount: userProfile.Followings.length
+        followersCount: userProfile.Followers != null ? userProfile.Followers.length : 0,
+        followingsCount: userProfile.Followings != null ? userProfile.Followings.length : 0
         //isFollowing eklenecek
     }
 )

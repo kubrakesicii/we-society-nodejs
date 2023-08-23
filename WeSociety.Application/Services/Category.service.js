@@ -6,8 +6,8 @@ const categoryMapping = require('../Mappings/Category.mapping');
 module.exports = {
     getAll : async (req, res,next) => {
         const categories = await context.Category.findAll()
-        // var dtos = categories.map(c => categoryMapping.GetCategoryDto(c))
-        return new OK(res,categories)
+        var dtos = categories.map(c => categoryMapping.GetCategoryDto(c))
+        return new OK(res,dtos)
     },
 
     getById : async (req, res,next) => {

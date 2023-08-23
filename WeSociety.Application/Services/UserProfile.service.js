@@ -6,7 +6,6 @@ const {ConvertFileToByteArray} = require("../Helpers/FileHelper")
 
 module.exports = {
     getById : async (req,res,next) => {
-        
         const userProfile = await context.UserProfile.findOne({
             include:["Followers","Followings","User"],
             where: {Id:req.params.id}
