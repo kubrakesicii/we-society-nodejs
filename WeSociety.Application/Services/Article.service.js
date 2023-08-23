@@ -3,8 +3,6 @@ const {OK,SuccessResponse} = require('../Reponses/Response')
 const userProfileMapping = require('../Mappings/UserProfile.mapping')
 const articleMapping = require('../Mappings/Article.mapping')
 const categoryMapping = require('../Mappings/Category.mapping');
-const UserProfile = require('../../WeSociety.Domain/Models/UserProfile.model');
-const User = require('../../WeSociety.Domain/Models/AspNetUser.model');
 
 module.exports = {
     insert : async (req, res,next) => {
@@ -155,12 +153,12 @@ module.exports = {
         const data = req.body;
         const updArticle = {...data, mainImage: req.files != null ? req.files.mainImage.data : null}
 
-        // const affectedRows = await context.Article.update(updArticle, {
-        //     where: {
-        //         Id:req.params.id
-        //     }
-        // });
-        // if(affectedRows == 0) return next(new NotfoundError(res))
+        const affectedRows = await context.Article.update(updArticle, {
+            where: {
+                Id:req.params.id
+            }
+        });
+        if(affectedRows == 0) return next(new NotfoundError(res))
         return new SuccessResponse(res)   
     }
     

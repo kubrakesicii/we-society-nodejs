@@ -17,7 +17,7 @@ app.use(fileUpload({
 app.use(function(req, res, next) {
     for (var key in req.body)
     { 
-      req.body[key.charAt(0).toLowerCase()+key.slice(1)] = req.body[key];
+      req.body[key.charAt(0).toUpperCase()+key.slice(1)] = req.body[key];
     }
     next();
   });
