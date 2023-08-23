@@ -1,9 +1,11 @@
 const context = require('../../WeSociety.Persistence/Context/DbContext')
 const {OK,SuccessResponse} = require('../Reponses/Response')
+const readingListMapping = require('../Mappings/ReadingList.mapping')
 
 module.exports = {
     insert: async (req,res,next) => {
         const data = req.body;
+        console.log("BODY : ",req.body);
         await context.ReadingList.create(data)
         return new SuccessResponse(res)
     },
@@ -16,6 +18,7 @@ module.exports = {
             }
         })
 
-        return new OK(res, lists)
+        const listDtos = lists.map(l => readingListMapping.GetReadingListDto(l))
+        return new OK(res, listDtos)
     }
 }

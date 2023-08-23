@@ -5,7 +5,6 @@ const articleCommentMapping = require('../Mappings/ArticleComment.mapping')
 module.exports = {
     insert : async (req, res, next) => {
         const data = req.body;
-        console.log("Data : ", data);
         await context.ArticleComment.create(data)
         return new SuccessResponse(res)   
     },

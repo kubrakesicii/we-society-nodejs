@@ -21,10 +21,6 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: false
         },
-        Description: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
         UserProfileId: {
             type: DataTypes.INTEGER,
             allowNull: false,
