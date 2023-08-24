@@ -6,6 +6,8 @@ require('sequelize');
 module.exports = (sequelize) => {
     class FollowRelationship extends Model{
         static associate = (models) => {
+            FollowRelationship.belongsTo(models.UserProfile, {foreignKey:"FollowerId", as:"Follower"})
+            FollowRelationship.belongsTo(models.UserProfile, {foreignKey:"FollowingId", as:"Following"})
         }
     }
 
