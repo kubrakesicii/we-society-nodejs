@@ -5,7 +5,7 @@ require('sequelize');
 module.exports = (sequelize) => {
     class ReadingListArticle extends Model{
         static associate = (models) => {
-
+            ReadingListArticle.belongsTo(models.Article, {foreignKey:"ArticleId", as:"Article"})
         }
     }
 

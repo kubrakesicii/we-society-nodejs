@@ -17,7 +17,14 @@ module.exports = {
 
     update : async (req,res,next) => {
         const data = req.body;
-        const updData = {...data, image:req.files.image != null ? req.files.image.data : null}
+        let updData;
+        if(req.files == null) {
+            const {image, Image, ...rest} = data;
+            updData = rest;
+        }
+        else {
+            updData = {...data, Image:req.files != null ? req.files.image.data : null}
+        }
 
         const affectedRows = await context.UserProfile.update(updData, {
             where: {

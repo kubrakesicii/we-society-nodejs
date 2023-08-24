@@ -1,19 +1,8 @@
 const { Model, UUID,DataTypes } = require("sequelize");
 require('sequelize');
-const bcrypt = require("bcrypt");
-
 
 module.exports = (sequelize) => {
   class AspNetUser extends Model{
-     async generateHash(password) {
-        return await bcrypt.hash(password, 10);
-    }
-     async validatePassword(password) {
-      console.log("PAS : ", password);
-      console.log("HASH : ",this.PasswordHash);
-        return await bcrypt.compare(password, this.PasswordHash);
-    }
-
     static associate = (models) => {
         AspNetUser.belongsTo(models.UserProfile, {as:"UserProfile"})
     }
@@ -23,7 +12,8 @@ module.exports = (sequelize) => {
     Id: {
       type: DataTypes.STRING,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4
     },
     UserName: { type: DataTypes.STRING, allowNull: false },
     Email: { type: DataTypes.STRING, allowNull: false },

@@ -4,11 +4,11 @@ const GetArticleDto = (article) => (
         title:article.Title,
         domain : article.Domain,
         content : article.Content,
-        mainImage : article.MainImage,
+        mainImage : article.MainImage == null ? null : Buffer.from(article.MainImage).toString('base64'),
         createdTime : article.CreatedTime,
         updatedTime : article.UpdatedTime,
-        clapCount : article.Claps.length,
-        commentCount : article.Comments.length
+        clapCount: article.Claps != null ? article.Claps.length : 0,
+        commentCount: article.Comments != null ? article.Comments.length : 0
     }
 )
 
