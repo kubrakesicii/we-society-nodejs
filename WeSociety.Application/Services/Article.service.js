@@ -13,8 +13,6 @@ module.exports = {
       Domain: data.title.toLowerCase().replace(" ", "-"),
     };
 
-    console.log("NEW ART : ", insArticle);
-
     await context.Article.create(insArticle);
     return new SuccessResponse(res);
   },

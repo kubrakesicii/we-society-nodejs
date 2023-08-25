@@ -52,8 +52,6 @@ const InitializeDbContext = async () => {
   dbContext.ReadingList = ReadingList;
   dbContext.ReadingListArticle = ReadingListArticle;
 
-  console.log("HERE DB CTX");
-
   Article.associate(dbContext);
   Category.associate(dbContext);
   ArticleClap.associate(dbContext);

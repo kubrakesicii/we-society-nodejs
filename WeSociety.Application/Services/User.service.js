@@ -32,8 +32,6 @@ module.exports = {
 
     login : async (req,res,next) => {
         const data = req.body;
-
-        console.log("Data : ",data);
         const user = await context.AspNetUser.findOne({
             where:{
                 Email:req.body.Email

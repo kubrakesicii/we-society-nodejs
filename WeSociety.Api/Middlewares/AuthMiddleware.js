@@ -4,7 +4,6 @@ const jwt = require('jsonwebtoken')
 
 
 module.exports = async (req, res,next) => {
-    console.log("IN AUTH MİDD");
     try{
         const token = req.headers.authorization?.split(" ")[1] || "";
 
@@ -17,7 +16,6 @@ module.exports = async (req, res,next) => {
         }
         next()
     } catch(error) {
-        console.log("ERR : ", error);
         if (error.name == "TokenExpiredError") {
             return next(new TokenExpiredError())
         }

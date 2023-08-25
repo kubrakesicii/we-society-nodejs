@@ -5,7 +5,6 @@ const readingListMapping = require('../Mappings/ReadingList.mapping')
 module.exports = {
     insert: async (req,res,next) => {
         const data = req.body;
-        console.log("BODY : ",req.body);
         await context.ReadingList.create(data)
         return new SuccessResponse(res)
     },

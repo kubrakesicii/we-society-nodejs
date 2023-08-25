@@ -27,7 +27,6 @@ module.exports = {
       return clap.UserProfileId
     });
 
-    console.log("GROUP : ", typeof(grouped));
     const clapDtos = Object.entries(grouped).map((g) =>
       articleClapMapping.GetArticleClapDto(g[1])
     );
