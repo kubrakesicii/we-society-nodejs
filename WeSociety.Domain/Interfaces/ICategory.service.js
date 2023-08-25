@@ -1,3 +1,0 @@
-// interface ICategory {
-//     getById : 
-// }
