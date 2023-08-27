@@ -110,10 +110,6 @@ module.exports = {
   },
 
   getAllPopulars: async (req, res, next) => {
-    const offset =
-      (parseInt(req.query.pageIndex) - 1) * parseInt(req.query.pageSize);
-    const limit = parseInt(req.query.pageSize);
-
     let catCond = { IsPublished: 1 };
     if (req.query.categoryId != null && req.query.categoryId != 0) {
       catCond = { ...catCond, CategoryId: req.query.categoryId };
@@ -127,8 +123,8 @@ module.exports = {
         "Category",
       ],
       order: [["viewCount", "DESC"]],
-      limit: req.query.pageSize == null ? 10 : limit,
-      offset: req.query.pageIndex == null ? 0 : offset,
+      limit: 5,
+      offset: 0
     });
 
     const articleDtos = [];

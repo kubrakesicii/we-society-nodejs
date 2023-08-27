@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodeapi-deployment
+  labels:
+    app: nodeapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nodeapi
+  template:
+    metadata:
+      labels:
+        app: nodeapi
+    spec:
+      containers:
+      - name: nodeapi
+        image: kubraakesici/node-api:1.3
+        ports:
+        - containerPort: 4000
+        env:
+        - name: JWT_SECURITY_KEY
+          valueFrom:
+            secretKeyRef:
+              name: nodeapi-secret
+              key: jwt-security-key
+        - name: DB_SERVER
+          valueFrom:
+            secretKeyRef:
+              name: nodeapi-secret
+              key: db-server
+        - name: DB_NAME
+          valueFrom:
+            secretKeyRef:
+              name: nodeapi-secret
+              key: db-name
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: nodeapi-secret
+              key: db-user
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: nodeapi-secret
+              key: db-password
+          
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodeapi-service
+spec:
+  type: NodePort
+  selector:
+    app: nodeapi
+  ports:
+    - protocol: TCP
+      port: 4000
+      targetPort: 4000
+      nodePort: 30103

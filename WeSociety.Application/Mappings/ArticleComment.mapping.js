@@ -5,7 +5,7 @@ const GetArticleCommentDto = (articleComment) => (
         userProfile : {
             id: articleComment.UserProfile.Id,
             fullName: articleComment.UserProfile.FullName,
-            image: articleComment.UserProfile.Image,
+            image : articleComment.UserProfile.Image == null ? null :Buffer.from(articleComment.UserProfile.Image).toString('base64'),
         },
         createdTime: articleComment.CreatedTime
     }
