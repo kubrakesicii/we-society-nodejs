@@ -26,10 +26,6 @@ app.use(function(req, res, next) {
 require("./WeSociety.Api/Routes/AllRoutes")(app);
 
 app.use(ErrorHandlerMiddleware)
-// app.listen(4000, () => {
-//     console.log("Server started at 4000");
-// })
-
-app.listen(4000,"127.0.0.1", () => {
+app.listen(4000, () => {
   console.log("Server started at 4000");
 })

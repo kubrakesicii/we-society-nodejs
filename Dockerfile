@@ -1,6 +1,6 @@
 FROM node:18-alpine
-WORKDIR /node-api
-COPY ./package.json /node-api
+WORKDIR /nodeapi
+COPY package*.json ./
 
 RUN npm install
 COPY . .

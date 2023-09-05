@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: nodeapi
-        image: kubraakesici/node-api:1.4
+        image: kubraakesici/node-api:1.1
         ports:
         - containerPort: 4000
         env:
