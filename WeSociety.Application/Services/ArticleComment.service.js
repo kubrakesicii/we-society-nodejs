@@ -1,23 +1,20 @@
-const context = require('../../WeSociety.Persistence/Context/DbContext')
-const {OK,SuccessResponse} = require('../Reponses/Response')
-const articleCommentMapping = require('../Mappings/ArticleComment.mapping')
+const context = require('../../WeSociety.Persistence/context/dbContext')
+const articleCommentMapping = require('../mappings/articleComment.mapping')
 
 module.exports = {
-    insert : async (req, res, next) => {
-        const data = req.body;
+    insert : async (data) => {
         await context.ArticleComment.create(data)
-        return new SuccessResponse(res)   
     },
 
-    getAllByArticle: async (req,res,next) => {
+    getAllByArticle: async (articleId) => {
         const comments = await context.ArticleComment.findAll({
             include: ["UserProfile"], 
             where : {
-                ArticleId : req.query.articleId
+                ArticleId : articleId
             }
         })
 
         const commentDtos = comments.map(c => articleCommentMapping.GetArticleCommentDto(c))
-        return new OK(res, commentDtos)
+        return commentDtos;
     }
 }

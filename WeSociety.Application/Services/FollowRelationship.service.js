@@ -1,73 +1,60 @@
-const context = require("../../WeSociety.Persistence/Context/DbContext");
-const { OK, SuccessResponse } = require("../Reponses/Response");
-const { NotfoundError } = require("../Errors/ErrorResponse");
-const followRelMapping = require("../Mappings/FollowRelationship.mapping");
+const context = require("../../WeSociety.Persistence/context/dbContext");
+const { NotfoundError } = require("../errors/errorResponse");
+const followRelMapping = require("../mappings/followRelationship.mapping");
 
 module.exports = {
-  getAllFollowers: async (req, res, next) => {
-    const offset =
-      (parseInt(req.query.pageIndex) - 1) * parseInt(req.query.pageSize);
-    const limit = parseInt(req.query.pageSize);
-
+  getAllFollowers: async (pageIndex, pageSize, userProfileId) => {
     const followers = await context.FollowRelationship.findAndCountAll({
       include: [{ association: "Follower", include: ["User"] }],
-      where: { FollowingId: req.query.userProfileId },
-      limit: req.query.pageSize == null ? 10 : limit,
-      offset: req.query.pageIndex == null ? 0 : offset,
+      where: { FollowingId: userProfileId },
+      limit: pageIndex == null ? 10 : pageIndex,
+      offset: pageSize == null ? 0 : pageSize,
       distinct: true,
     });
 
     const followerDtos = followers.rows.map((f) =>
       followRelMapping.GetFollowerDto(f)
     );
-    return new OK(res, { count: followers.count, items: followerDtos });
+    return { count: followers.count, items: followerDtos };
   },
 
-  getAllFollowings: async (req, res, next) => {
-    const offset =
-      (parseInt(req.query.pageIndex) - 1) * parseInt(req.query.pageSize);
-    const limit = parseInt(req.query.pageSize);
-
+  getAllFollowings: async (pageIndex, pageSize, userProfileId) => {
     const followings = await context.FollowRelationship.findAndCountAll({
       include: [{ association: "Following", include: ["User"] }],
-      where: { FollowerId: req.query.userProfileId },
-      limit: req.query.pageSize == null ? 10 : limit,
-      offset: req.query.pageIndex == null ? 0 : offset,
+      where: { FollowerId: userProfileId },
+      limit: pageIndex == null ? 10 : pageIndex,
+      offset: pageSize == null ? 0 : pageSize,
       distinct: true,
     });
 
     const followingDtos = followings.rows.map((f) =>
       followRelMapping.GetFollowingDto(f)
     );
-    return new OK(res, { count: followings.count, items: followingDtos });
+    return { count: followings.count, items: followingDtos };
   },
 
-  getIsFollow: async (req, res, next) => {
+  getIsFollow: async (followerId,followingId) => {
     const isFollow = await context.FollowRelationship.findOne({
       where: {
-        FollowerId: parseInt(req.query.followerId),
-        FollowingId: parseInt(req.query.followingId),
+        FollowerId: followerId,
+        FollowingId: followingId
       },
     });
-    if (isFollow != null) return new OK(res, true);
-    return new OK(res, false);
+    if (isFollow != null) return true;
+    return false;
   },
 
-  follow: async (req, res, next) => {
-    const data = req.body;
+  follow: async (data) => {
     await context.FollowRelationship.create(data);
-    return new SuccessResponse(res);
   },
 
-  unfollow: async (req, res, next) => {
-    const data = req.body;
+  unfollow: async (data) => {
     const affectedRows = await context.FollowRelationship.destroy({
       where: {
         FollowerId: data.FollowerId,
         FollowingId: data.FollowingId,
       },
     });
-    if (affectedRows == 0) return next(new NotfoundError(res));
-    return new SuccessResponse(res);
+    if (affectedRows == 0) new NotfoundError();
   },
 };

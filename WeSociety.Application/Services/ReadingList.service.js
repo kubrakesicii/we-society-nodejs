@@ -1,23 +1,20 @@
-const context = require('../../WeSociety.Persistence/Context/DbContext')
-const {OK,SuccessResponse} = require('../Reponses/Response')
-const readingListMapping = require('../Mappings/ReadingList.mapping')
+const context = require('../../WeSociety.Persistence/context/dbContext')
+const readingListMapping = require('../mappings/readingList.mapping')
 
 module.exports = {
-    insert: async (req,res,next) => {
-        const data = req.body;
+    insert: async (data) => {
         await context.ReadingList.create(data)
-        return new SuccessResponse(res)
     },
 
-    getAllByUser : async (req,res,next) => {
+    getAllByUser : async (userProfileId) => {
         const lists = await context.ReadingList.findAll({
             include: ["Articles"],
             where:{
-                UserProfileId: req.query.userProfileId
+                UserProfileId: userProfileId
             }
         })
 
         const listDtos = lists.map(l => readingListMapping.GetReadingListDto(l))
-        return new OK(res, listDtos)
+        return listDtos;
     }
 }

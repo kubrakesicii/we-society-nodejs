@@ -1,12 +1,12 @@
 const express = require('express')
 const router = express.Router({caseSensitive: false});
-const ReadingListArticleController = require("../Controllers/ReadingListArticle.controller")
-const auth = require('../Middlewares/AuthMiddleware')
+const readingListArticleController = require("../controllers/readingListArticle.controller")
+const auth = require('../middlewares/authMiddleware')
 
-router.post("/", ReadingListArticleController.insert)
-router.get("/", ReadingListArticleController.getArticlesByList)
-router.get("/IsSaved", ReadingListArticleController.getIsSaved)
-router.delete("/:id", ReadingListArticleController.remove)
+router.post("/", readingListArticleController.insert)
+router.get("/", readingListArticleController.getArticlesByList)
+router.get("/IsSaved", readingListArticleController.getIsSaved)
+router.delete("/:id", readingListArticleController.remove)
 
 
 

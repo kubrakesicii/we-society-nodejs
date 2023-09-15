@@ -1,10 +1,10 @@
 const express = require('express')
 const router = express.Router({caseSensitive: false});
-const ReadingListController = require("../Controllers/ReadingList.controller")
-const auth = require('../Middlewares/AuthMiddleware')
+const readingListController = require("../controllers/readingList.controller")
+const auth = require('../middlewares/authMiddleware')
 
-router.post("/", ReadingListController.insert)
-router.get("/", ReadingListController.getAllByUser)
+router.post("/", readingListController.insert)
+router.get("/", readingListController.getAllByUser)
 
 
 

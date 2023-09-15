@@ -1,22 +1,22 @@
-const CategoryRouter = require('./Category.router')
-const ArticleRouter = require('./Article.router')
-const ArticleClapRouter = require('./ArticleClap.router')
-const ArticleCommentRouter = require('./ArticleComment.router')
-const FollowRelationshipRouter = require('./FollowRelationship.router')
-const ReadingListRouter = require('./ReadingList.router')
-const ReadingListArticleRouter = require('./ReadingListArticle.router')
-const UserRouter = require('./User.router')
-const UserProfileRouter = require('./UserProfile.router')
+const categoryRouter = require('./category.router')
+const articleRouter = require('./article.router')
+const articleClapRouter = require('./articleClap.router')
+const articleCommentRouter = require('./articleComment.router')
+const followRelationshipRouter = require('./followRelationship.router')
+const readingListRouter = require('./readingList.router')
+const readingListarticleRouter = require('./readingListArticle.router')
+const userRouter = require('./user.router')
+const userProfileRouter = require('./userProfile.router')
 
 
 module.exports = (app) => {
-    app.use('/Categories', CategoryRouter);
-    app.use('/Articles', ArticleRouter);
-    app.use('/ArticleClaps', ArticleClapRouter);
-    app.use('/ArticleComments', ArticleCommentRouter);
-    app.use('/FollowRelationships', FollowRelationshipRouter);
-    app.use('/ReadingLists', ReadingListRouter);
-    app.use('/ReadingListArticles', ReadingListArticleRouter);
-    app.use('/Auth', UserRouter);
-    app.use('/UserProfiles', UserProfileRouter);
+    app.use('/Categories', categoryRouter);
+    app.use('/Articles', articleRouter);
+    app.use('/ArticleClaps', articleClapRouter);
+    app.use('/ArticleComments', articleCommentRouter);
+    app.use('/FollowRelationships', followRelationshipRouter);
+    app.use('/ReadingLists', readingListRouter);
+    app.use('/ReadingListArticles', readingListarticleRouter);
+    app.use('/Auth', userRouter);
+    app.use('/UserProfiles', userProfileRouter);
 }

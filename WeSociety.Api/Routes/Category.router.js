@@ -1,13 +1,13 @@
 const express = require('express')
-const CategoryController = require('../Controllers/Category.controller')
+const categoryController = require('../controllers/category.controller')
 const router = express.Router({caseSensitive: false});
-const auth = require('../Middlewares/AuthMiddleware')
+const auth = require('../middlewares/authMiddleware')
 
 
-router.post('/', auth,CategoryController.insert)
-router.get('/', CategoryController.getAll)
-router.get('/:id', CategoryController.getById)
-router.put('/:id', CategoryController.update)
-router.delete('/:id', CategoryController.delete)
+router.post('/', auth,categoryController.insert)
+router.get('/', categoryController.getAll)
+router.get('/:id', categoryController.getById)
+router.put('/:id', categoryController.update)
+router.delete('/:id', categoryController.delete)
 
 module.exports = router;

@@ -1,21 +1,19 @@
-const context = require('../../WeSociety.Persistence/Context/DbContext')
-const {OK} = require('../Reponses/Response')
-const {UserExistsError, LoginError} = require('../Errors/ErrorResponse')
-const userMapping = require('../Mappings/User.mapping');
+const context = require('../../WeSociety.Persistence/context/dbContext')
+const {UserExistsError, LoginError} = require('../errors/errorResponse')
+const userMapping = require('../mappings/user.mapping');
 const uuid = require('uuid');
-const {createToken} = require('../../WeSociety.Infrastructure/Authentication/TokenService')
-const {generateHash,validatePassword} = require("../Helpers/PasswordHelper")
+const {createToken} = require('../../WeSociety.Infrastructure/authentication/tokenService')
+const {generateHash,validatePassword} = require("../helpers/passwordHelper")
 
 module.exports = {
-    register : async (req, res, next) => {
-        const data = req.body;
+    register : async (data) => {
         const exists = await context.AspNetUser.findOne({
             where:{
                 Email:data.Email
             }
         })
 
-        if(exists != null) return next(new UserExistsError(res))
+        if(exists != null) throw new UserExistsError()
         const newData = {...data,Id: uuid.v4(),
                     PasswordHash:await generateHash(data.Password)
                 };
@@ -26,26 +24,25 @@ module.exports = {
         await context.UserProfile.create({UserId:newUser.Id})
         
         const dto = userMapping.GetUserDto(newUser)
-        return new OK(res, dto)
+        return dto;
     },
 
 
-    login : async (req,res,next) => {
-        const data = req.body;
+    login : async (data) => {
         const user = await context.AspNetUser.findOne({
             where:{
                 Email:req.body.Email
             }
         })
 
-        if(user == null) return next(new LoginError(res))
+        if(user == null) throw new LoginError()
 
         const verify = await validatePassword(user.PasswordHash,data.Password)
-        if(!verify)  return next(new LoginError(res))
+        if(!verify) throw new LoginError()
 
         const userProfile = await context.UserProfile.findOne({include:"User", where:{UserId:user.Id}})
         const token = createToken(user.Id, user.Email, user.UserName, userProfile.Id)
         const dto = userMapping.GetLoginUserDto(userProfile,token)
-        return new OK(res,dto)
+        return dto;
     }
 }

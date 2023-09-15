@@ -1,13 +1,9 @@
 const express = require('express')
 const router = express.Router({caseSensitive: false});
-const UserProfileController =require("../Controllers/UserProfile.controller")
+const userProfileController =require("../controllers/userProfile.controller")
+const auth = require('../middlewares/authMiddleware')
 
-const auth = require('../Middlewares/AuthMiddleware')
-
-router.get('/:id', UserProfileController.getById)
-router.put('/:id', UserProfileController.update)
-
-
-
+router.get('/:id', userProfileController.getById)
+router.put('/:id', userProfileController.update)
 
 module.exports = router;

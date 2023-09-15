@@ -1,13 +1,14 @@
 const express = require('express')
 const router = express.Router({caseSensitive: false});
-const FollowRelationshipController = require("../Controllers/FollowRelationship.controller")
-const auth = require('../Middlewares/AuthMiddleware')
+const followRelationshipController = require("../controllers/followRelationship.controller")
+const auth = require('../middlewares/authMiddleware')
+const paginationMidd = require('../middlewares/paginationMiddleware')
 
-router.post("/Follow", FollowRelationshipController.follow)
-router.post("/UnFollow", FollowRelationshipController.unfollow)
-router.get("/Followers", FollowRelationshipController.getAllFollowers)
-router.get("/Followings", FollowRelationshipController.getAllFollowings)
-router.get("/IsFollow", FollowRelationshipController.getIsFollow)
+router.post("/Follow", followRelationshipController.follow)
+router.post("/UnFollow", followRelationshipController.unfollow)
+router.get("/Followers", paginationMidd,followRelationshipController.getAllFollowers)
+router.get("/Followings",paginationMidd, followRelationshipController.getAllFollowings)
+router.get("/IsFollow", followRelationshipController.getIsFollow)
 
 
 

@@ -1,16 +1,13 @@
-const context = require("../../WeSociety.Persistence/Context/DbContext");
-const { OK, SuccessResponse } = require("../Reponses/Response");
+const context = require("../../WeSociety.Persistence/context/dbContext");
 require("core-js/actual/array/group-by");
-const articleClapMapping = require("../Mappings/ArticleClap.mapping")
+const articleClapMapping = require("../mappings/articleClap.mapping")
 
 module.exports = {
   insert: async (req, res, next) => {
-    const data = req.body;
     await context.ArticleClap.create(data);
-    return new SuccessResponse(res);
   },
 
-  getAllByArticle: async (req, res, next) => {
+  getAllByArticle: async (articleId) => {
     const claps = await context.ArticleClap.findAll({
       include: [
         {
@@ -19,7 +16,7 @@ module.exports = {
         },
       ],
       where: {
-        ArticleId: req.query.articleId,
+        ArticleId: articleId,
       },
     });
 
@@ -31,6 +28,6 @@ module.exports = {
       articleClapMapping.GetArticleClapDto(g[1])
     );
 
-    return new OK(res, clapDtos);
+    return clapDtos;
   },
 };

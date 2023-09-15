@@ -1,15 +1,16 @@
 const express = require('express')
 const router = express.Router({caseSensitive: false});
-const ArticleController = require("../Controllers/Article.controller")
-const auth = require('../Middlewares/AuthMiddleware')
+const articleController = require("../controllers/article.controller")
+const auth = require('../middlewares/authMiddleware')
+const paginationMidd = require('../middlewares/paginationMiddleware')
 
-router.post("/", ArticleController.insert)
-router.put("/:id", ArticleController.update)
-router.get("/Drafts", ArticleController.getAllDrafts)
-router.get("/Popular", ArticleController.getAllPopulars)
-router.get("/ByUser", ArticleController.getAllByUser)
-router.get("/:id", ArticleController.getById)
-router.get("/", ArticleController.getAll)
+router.post("/", articleController.insert)
+router.put("/:id", articleController.update)
+router.get("/Drafts",paginationMidd, articleController.getAllDrafts)
+router.get("/Popular", articleController.getAllPopulars)
+router.get("/ByUser",paginationMidd, articleController.getAllByUser)
+router.get("/:id", articleController.getById)
+router.get("/", paginationMidd,articleController.getAll)
 
 
 module.exports = router;

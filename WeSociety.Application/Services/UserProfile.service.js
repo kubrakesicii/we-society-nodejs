@@ -1,42 +1,30 @@
-const context = require('../../WeSociety.Persistence/Context/DbContext')
-const {OK} = require('../Reponses/Response')
-const {UserExistsError, LoginError, NotfoundError} = require('../Errors/ErrorResponse')
-const userProfileMapping = require('../Mappings/UserProfile.mapping')
-const {ConvertFileToByteArray} = require("../Helpers/FileHelper")
+const context = require('../../WeSociety.Persistence/context/dbContext')
+const {NotfoundError} = require('../errors/errorResponse')
+const userProfileMapping = require('../mappings/userProfile.mapping')
 
 module.exports = {
-    getById : async (req,res,next) => {
+    getById : async (id) => {
         const userProfile = await context.UserProfile.findOne({
             include:["Followers","Followings","User"],
-            where: {Id:req.params.id}
+            where: {Id:id}
         })
 
         const getDto = userProfileMapping.GetUserProfileDto(userProfile)
-        return new OK(res,getDto)
+        return getDto;
     },
 
-    update : async (req,res,next) => {
-        const data = req.body;
-        let updData;
-        if(req.files == null) {
-            const {image, Image, ...rest} = data;
-            updData = rest;
-        }
-        else {
-            updData = {...data, Image:req.files != null ? req.files.image.data : null}
-        }
-
-        const affectedRows = await context.UserProfile.update(updData, {
+    update : async (id,data) => {
+        const affectedRows = await context.UserProfile.update(data, {
             where: {
-                Id:req.params.id
+                Id:id
             }
         })
         
-        if(affectedRows == 0) return next(new NotfoundError(res))
+        if(affectedRows == 0) throw new NotfoundError()
 
         //return
         const updUserProfile = await context.UserProfile.findOne({include:"User", where:{Id:req.params.id}})
         const updDto = userProfileMapping.GetUpdateUserDto(updUserProfile)
-        return new OK(res,updDto)
+        return updDto;
     }
 }

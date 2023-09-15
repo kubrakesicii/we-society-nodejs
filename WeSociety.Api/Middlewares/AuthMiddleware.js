@@ -1,5 +1,5 @@
-const {verifyToken} = require('../../WeSociety.Infrastructure/Authentication/TokenService')
-const {UnauthorizedError,TokenExpiredError} = require("../../WeSociety.Application/Errors/ErrorResponse")
+const {verifyToken} = require('../../WeSociety.Infrastructure/authentication/tokenService')
+const {UnauthorizedError,TokenExpiredError} = require("../../WeSociety.Application/errors/errorResponse")
 const jwt = require('jsonwebtoken')
 
 

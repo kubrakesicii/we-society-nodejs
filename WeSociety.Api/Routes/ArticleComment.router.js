@@ -1,10 +1,10 @@
 const express = require('express')
 const router = express.Router({caseSensitive: false});
-const ArticleCommentController = require("../Controllers/ArticleComment.controller")
-const auth = require('../Middlewares/AuthMiddleware')
+const articleCommentController = require("../controllers/articleComment.controller")
+const auth = require('../middlewares/authMiddleware')
 
-router.post("/",ArticleCommentController.insert)
-router.get("/",ArticleCommentController.getAllByArticle)
+router.post("/",articleCommentController.insert)
+router.get("/",articleCommentController.getAllByArticle)
 
 
 

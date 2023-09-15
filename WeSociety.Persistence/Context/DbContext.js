@@ -16,29 +16,29 @@ const InitializeDbContext = async () => {
   dbContext.conn = sequelize;
 
   // Init models and add them to the exported db object
-  const Article = require("../../WeSociety.Domain/Models/Article.model")(
+  const Article = require("../../WeSociety.Domain/models/article.model")(
     sequelize
   );
-  const Category = require("../../WeSociety.Domain/Models/Category.model")(
+  const Category = require("../../WeSociety.Domain/models/category.model")(
     sequelize
   );
   const UserProfile =
-    require("../../WeSociety.Domain/Models/UserProfile.model")(sequelize);
-  const AspNetUser = require("../../WeSociety.Domain/Models/AspNetUser.model")(
+    require("../../WeSociety.Domain/models/userProfile.model")(sequelize);
+  const AspNetUser = require("../../WeSociety.Domain/models/aspNetUser.model")(
     sequelize
   );
   const ArticleClap =
-    require("../../WeSociety.Domain/Models/ArticleClap.model")(sequelize);
+    require("../../WeSociety.Domain/models/articleClap.model")(sequelize);
   const ArticleComment =
-    require("../../WeSociety.Domain/Models/ArticleComment.model")(sequelize);
+    require("../../WeSociety.Domain/models/articleComment.model")(sequelize);
   const FollowRelationship =
-    require("../../WeSociety.Domain/Models/FollowRelationship.model")(
+    require("../../WeSociety.Domain/models/followRelationship.model")(
       sequelize
     );
   const ReadingList =
-    require("../../WeSociety.Domain/Models/ReadingList.model")(sequelize);
+    require("../../WeSociety.Domain/models/readingList.model")(sequelize);
   const ReadingListArticle =
-    require("../../WeSociety.Domain/Models/ReadingListArticle.model")(
+    require("../../WeSociety.Domain/models/readingListArticle.model")(
       sequelize
     );
 

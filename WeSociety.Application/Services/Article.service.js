@@ -1,23 +1,14 @@
-const context = require("../../WeSociety.Persistence/Context/DbContext");
-const { OK, SuccessResponse } = require("../Reponses/Response");
-const userProfileMapping = require("../Mappings/UserProfile.mapping");
-const articleMapping = require("../Mappings/Article.mapping");
-const categoryMapping = require("../Mappings/Category.mapping");
+const context = require("../../WeSociety.Persistence/context/dbContext");
+const userProfileMapping = require("../mappings/userProfile.mapping");
+const articleMapping = require("../mappings/article.mapping");
+const categoryMapping = require("../mappings/category.mapping");
 
 module.exports = {
-  insert: async (req, res, next) => {
-    const data = req.body;
-    const insArticle = {
-      ...data,
-      MainImage: req.files != null ? req.files.mainImage.data : null,
-      Domain: data.title.toLowerCase().replace(" ", "-"),
-    };
-
-    await context.Article.create(insArticle);
-    return new SuccessResponse(res);
+  insert: async (data) => {
+    await context.Article.create(data);
   },
 
-  getById: async (req, res, next) => {
+  getById: async (id) => {
     const article = await context.Article.findOne({
       include: [
         { association: "UserProfile", include: ["User"] },
@@ -25,29 +16,24 @@ module.exports = {
         "Claps",
         "Category",
       ],
-      where: { Id: req.params.id },
+      where: { Id: id },
     });
+
+    if(article == null) throw new NotfoundError()
 
     const articleDto = articleMapping.GetArticleDto(article);
     articleDto.userProfile = userProfileMapping.GetUserProfileDto(
       article.UserProfile
     );
     articleDto.category = categoryMapping.GetCategoryDto(article.Category);
-    return new OK(res, articleDto);
+    return articleDto
   },
 
-  getAll: async (req, res, next) => {
-    const offset =
-      (parseInt(req.query.pageIndex) - 1) * parseInt(req.query.pageSize);
-    const limit = parseInt(req.query.pageSize);
-
+  getAll: async (pageIndex,pageSize,categoryId) => {
     let whereCond = { IsPublished: 1 };
-    if (req.query.categoryId != null && req.query.categoryId != 0) {
-      whereCond = { ...whereCond, CategoryId: req.query.categoryId };
+    if (categoryId != null && categoryId != 0) {
+      whereCond = { ...whereCond, CategoryId: categoryId };
     }
-    // if(req.query.searchKey != "" && req.query.searchKey != null) {
-    //     whereCond = {...whereCond, Title: sequelize.where(sequelize.fn('LOWER', sequelize.col('Title')), 'LIKE', '%'+req.query.searchKey+'%')}
-    // }
 
     const articles = await context.Article.findAndCountAll({
       where: whereCond,
@@ -58,8 +44,8 @@ module.exports = {
         "Category",
       ],
       order: [["CreatedTime", "DESC"]],
-      limit: req.query.pageSize == null ? 10 : limit,
-      offset: req.query.pageIndex == null ? 0 : offset,
+      limit: pageSize == null ? 10 : pageSize,
+      offset: pageIndex == null ? 0 : pageIndex,
       distinct: true,
     });
 
@@ -74,16 +60,12 @@ module.exports = {
       articleDtos.push(articleDto);
     });
 
-    return new OK(res, { count: articles.count, items: articleDtos });
+    return { count: articles.count, items: articleDtos };
   },
 
-  getAllDrafts: async (req, res, next) => {
-    const offset =
-      (parseInt(req.query.pageIndex) - 1) * parseInt(req.query.pageSize);
-    const limit = parseInt(req.query.pageSize);
-
+  getAllDrafts: async (pageIndex,pageSize,userProfileId) => {
     const articles = await context.Article.findAndCountAll({
-      where: { UserProfileId: req.query.userProfileId },
+      where: { UserProfileId: userProfileId },
       order: [["CreatedTime", "DESC"]],
       include: [
         { association: "UserProfile", include: ["User"] },
@@ -91,8 +73,8 @@ module.exports = {
         "Claps",
         "Category",
       ],
-      limit: req.query.pageSize == null ? 10 : limit,
-      offset: req.query.pageIndex == null ? 0 : offset,
+      limit: pageSize == null ? 10 : pageSize,
+      offset: pageIndex == null ? 0 : pageIndex,
       distinct: true,
     });
 
@@ -106,13 +88,13 @@ module.exports = {
       articleDtos.push(articleDto);
     });
 
-    return new OK(res, { count: articles.count, items: articleDtos });
+    return { count: articles.count, items: articleDtos };
   },
 
-  getAllPopulars: async (req, res, next) => {
+  getAllPopulars: async (categoryId) => {
     let catCond = { IsPublished: 1 };
-    if (req.query.categoryId != null && req.query.categoryId != 0) {
-      catCond = { ...catCond, CategoryId: req.query.categoryId };
+    if (categoryId != null && categoryId != 0) {
+      catCond = { ...catCond, CategoryId: categoryId };
     }
     const articles = await context.Article.findAll({
       // where: catCond,
@@ -137,14 +119,10 @@ module.exports = {
       articleDtos.push(articleDto);
     });
 
-    return new OK(res, articleDtos);
+    return articleDtos;
   },
 
-  getAllByUser: async (req, res, next) => {
-    const offset =
-      (parseInt(req.query.pageIndex) - 1) * parseInt(req.query.pageSize);
-    const limit = parseInt(req.query.pageSize);
-
+  getAllByUser: async (pageIndex,pageSize,userProfileId) => {
     const articles = await context.Article.findAndCountAll({
       where: { UserProfileId: req.query.userProfileId, IsPublished: 1 },
       order: [["CreatedTime", "DESC"]],
@@ -154,8 +132,8 @@ module.exports = {
         "Claps",
         "Category",
       ],
-      limit: req.query.pageSize == null ? 10 : limit,
-      offset: req.query.pageIndex == null ? 0 : offset,
+      limit: pageSize == null ? 10 : pageSize,
+      offset: pageIndex == null ? 0 : pageIndex,
       distinct: true,
     });
 
@@ -169,28 +147,15 @@ module.exports = {
       articleDtos.push(articleDto);
     });
 
-    return new OK(res, { count: articles.count, items: articleDtos });
+    return  { count: articles.count, items: articleDtos };
   },
 
-  update: async (req, res, next) => {
-    const data = req.body;
-    let updArticle;
-    if (req.files == null) {
-      const { mainImage, MainImage, ...rest } = data;
-      updArticle = rest;
-    } else {
-      updArticle = {
-        ...data,
-        MainImage: req.files != null ? req.files.mainImage.data : null,
-      };
-    }
-
-    const affectedRows = await context.Article.update(updArticle, {
+  update: async (id,data) => {
+    const affectedRows = await context.Article.update(data, {
       where: {
-        Id: req.params.id,
+        Id: id,
       },
     });
-    if (affectedRows == 0) return next(new NotfoundError(res));
-    return new SuccessResponse(res);
+    if (affectedRows == 0) throw new NotfoundError()
   },
 };
